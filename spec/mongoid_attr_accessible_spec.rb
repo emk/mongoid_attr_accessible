@@ -27,7 +27,7 @@ class Role
   embedded_in :user, :inverse_of => :roles
 end
 
-describe Mongoid, ".attr_accessible" do
+describe Mongoid::Document, ".attr_accessible" do
   context "ordinary fields" do
     it "should be bulk updatable if named" do
       user = User.new(:first_name => 'Foo', :mi => 'B', :last_name => 'Ar')
