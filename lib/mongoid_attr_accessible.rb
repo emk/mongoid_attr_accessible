@@ -62,6 +62,18 @@ module Mongoid
       end
       alias_method :write_allowed_without_attr_accessible?, :write_allowed?
       alias_method :write_allowed?, :write_allowed_with_attr_accessible?
+
+      # We completely disable Mongoid.allow_dynamic_fields for classes
+      # where attr_accessible is true, just to be on the safe side.
+      def set_allowed_with_attr_accessible?(attr)
+        if self.class.has_attr_accessible?
+          false
+        else
+          set_allowed_without_attr_accessible?(attr)
+        end
+      end
+      alias_method :set_allowed_without_attr_accessible?, :set_allowed?
+      alias_method :set_allowed?, :set_allowed_with_attr_accessible?
     end
   end
 end

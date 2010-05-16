@@ -17,6 +17,10 @@ def fixture_path(path)
 end
 
 Mongoid.configure do |config|
+  # Turn this nasty thing on to make sure we actually disable it correctly.
+  config.allow_dynamic_fields = true
+
+  # Connect to our database.
   config.master = Mongo::Connection.new.db('mongoid_attr_accessible_test')
 end
 

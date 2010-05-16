@@ -104,5 +104,8 @@ describe Mongoid::Document, ".attr_accessible" do
     end
   end
 
-  # it should not allow updates to arbitrary instance variables
+  it "should not allow updates to arbitrary instance variables" do
+    user = User.new(:undeclared => "Foo")
+    user.respond_to?(:undeclared).should == false
+  end
 end

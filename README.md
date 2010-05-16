@@ -84,7 +84,7 @@ listed as a field:
 ## The fix
 
 We replace write_allowed? with a much stricter policy, making it possible
-to use attr_accesible in the fashion similar to that of ActiveRecord.
+to use attr_accesible in a fashion similar to that of ActiveRecord.
 
     class Player
       include Mongoid::Document
@@ -100,3 +100,7 @@ to use attr_accesible in the fashion similar to that of ActiveRecord.
       # Only explicitly-listed fields should be bulk updatable.
       attr_accessible :name
     end
+
+We also attempt to disable Mongoid.allow_dynamic_fields for classes where
+attr_accessible is used.
+
