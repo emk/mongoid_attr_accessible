@@ -12,6 +12,11 @@ class User
 
   attr_accessible :first_name
   attr_accessible 'mi', :last_name
+
+  attr :regular_attr_1, :writable => true
+  attr :regular_attr_2, :writable => true
+
+  attr_accessible :regular_attr_1
 end
 
 describe Mongoid, ".attr_accessible" do
@@ -44,7 +49,24 @@ describe Mongoid, ".attr_accessible" do
     end
   end
 
-  # context "other setters"
+  context "other setters" do
+    before do
+      @user = User.new
+      @user.process(:regular_attr_1 => 'Foo', :regular_attr_2 => 'Bar')
+    end
+
+    it "should be bulk-updateable if named" do
+      @user.attributes = { :regular_attr_1 => 'Foo' }
+      @user.regular_attr_1.should == 'Foo'
+    end
+
+    it "should not be bulk updatable otherwise" do
+      @user.attributes = { :regular_attr_2 => 'Bar' }
+      @user.regular_attr_2.should be_nil
+    end
+  end
+
   # context "associations"
   # context "classes without attr_accessible"
+  # context "inheritence"
 end
