@@ -21,6 +21,13 @@ class User
   embeds_many :roles
 end
 
+class Admin < User
+  field :for_site
+  field :status
+
+  attr_accessible :status
+end
+
 class Role
   include Mongoid::Document
   field :name
@@ -86,5 +93,16 @@ describe Mongoid::Document, ".attr_accessible" do
     end
   end
 
-  # context "inheritence"
+  context "inheritence" do
+    it "should take the union of accessible attributes in all superclasses" do
+      admin = Admin.new(:first_name => "Foo", :security_key => "Evil value",
+                        :for_site => 'wrong-site', :status => "Working")
+      admin.first_name.should == "Foo"
+      admin.security_key.should be_nil
+      admin.for_site.should be_nil
+      admin.status.should == "Working"
+    end
+  end
+
+  # it should not allow updates to arbitrary instance variables
 end

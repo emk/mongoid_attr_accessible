@@ -32,12 +32,22 @@ module Mongoid
 
       # Does this class have attr_accessible?
       def has_attr_accessible?
-        !@has_attr_accessible.nil?
+        !@has_attr_accessible.nil? or
+          if superclass.respond_to?(:has_attr_accessible?)
+            superclass.has_attr_accessible?
+          else
+            false
+          end
       end
 
       # Is attr accessible via bulk update?
       def attr_accessible?(attr)
-        @attr_accessible.include?(attr.to_sym)
+        @attr_accessible.include?(attr.to_sym) or
+          if superclass.respond_to?(:attr_accessible?)
+            superclass.attr_accessible?(attr)
+          else
+            false
+          end
       end
     end
 
