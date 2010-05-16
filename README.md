@@ -2,7 +2,7 @@ WORK IN PROGRESS!  This doesn't do anything yet.
 
 ## The problem(s)
 
-Mongoid's built-in :accessible support suffers from a number of severe
+Mongoid's built-in `:accessible` support suffers from a number of severe
 limitations that can get you in quite a bit of trouble if you do this:
 
     # Don't do this with standard Mongoid!
@@ -11,7 +11,7 @@ limitations that can get you in quite a bit of trouble if you do this:
     # Don't do this, either.
     player.update_attributes(params[:player])
 
-When you do either of these, you take unsanitized user input from params
+When you do either of these, you take unsanitized user input from `params`
 and use it to directly modify a player object.  For example:
 
     # An item carried by a player in an online game.
@@ -51,13 +51,13 @@ and use it to directly modify a player object.  For example:
 
 Of course, you could just avoid bulk assignment of untrusted data (an
 excellent idea in and of itself).  But there are some Rails engine plugin
-which call update_attributes with untrusted data, leading to potentially
+which call `update_attributes` with untrusted data, leading to potentially
 disasterous consequences.
 
 ## Why it fails
 
 Here are the problematic bits of code from Mongoid.  This function will
-bulk update any attributes where write_allowed? returns true:
+bulk update any attributes where `write_allowed?` returns true:
 
     # From Mongoid::Attributes::InstanceMethods.
     def process(attrs = nil)
@@ -71,7 +71,7 @@ bulk update any attributes where write_allowed? returns true:
       setup_modifications
     end
 
-And write_allowed? returns true for anything which isn't explicitly
+And `write_allowed?` returns true for anything which isn't explicitly
 listed as a field:
 
     def write_allowed?(key)
@@ -83,8 +83,8 @@ listed as a field:
 
 ## The fix
 
-We replace write_allowed? with a much stricter policy, making it possible
-to use attr_accesible in a fashion similar to that of ActiveRecord.
+We replace `write_allowed?` with a much stricter policy, making it possible
+to use `attr_accesible` in a fashion similar to that of ActiveRecord.
 
     class Player
       include Mongoid::Document
@@ -101,8 +101,8 @@ to use attr_accesible in a fashion similar to that of ActiveRecord.
       attr_accessible :name
     end
 
-We also attempt to disable Mongoid.allow_dynamic_fields for classes where
-attr_accessible is used.
+We also attempt to disable `Mongoid.allow_dynamic_fields` for classes where
+`attr_accessible` is used.
 
 ## Why don't you support `attr_protected?`
 
