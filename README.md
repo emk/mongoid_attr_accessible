@@ -104,7 +104,7 @@ to use `attr_accesible` in a fashion similar to that of ActiveRecord.
 We also attempt to disable `Mongoid.allow_dynamic_fields` for classes where
 `attr_accessible` is used.
 
-## Why don't you support `attr_protected?`
+## Why don't you support `attr_protected`?
 
 The Mongoid codebase has lots of tricky corner cases like `_type=` that
 would need to be extensively audited and carefully tested before supporting
