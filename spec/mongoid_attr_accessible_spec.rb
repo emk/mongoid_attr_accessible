@@ -3,17 +3,24 @@ require File.join(File.dirname(__FILE__), 'spec_helper')
 class User
   include Mongoid::Document
 
-  field :name
+  field :first_name
+  field :mi
+  field :last_name
+
   field :email, :accessible => true
   field :security_key
 
-  attr_accessible :name
+  attr_accessible :first_name
+  attr_accessible 'mi', :last_name
 end
 
 describe Mongoid, ".attr_accessible" do
   context "ordinary fields" do
     it "should be bulk updatable if named" do
-      User.new(:name => 'Foo').name.should == 'Foo'
+      user = User.new(:first_name => 'Foo', :mi => 'B', :last_name => 'Ar')
+      user.first_name.should == 'Foo'
+      user.mi.should == 'B'
+      user.last_name.should == 'Ar'
     end
 
     it "should be bulk updatable if declared with :accessible => true" do
@@ -37,8 +44,6 @@ describe Mongoid, ".attr_accessible" do
     end
   end
 
-  # it "should allow either strings or symbols"
-  # it "should combine multiple declarations"
   # context "other setters"
   # context "associations"
   # context "classes without attr_accessible"
