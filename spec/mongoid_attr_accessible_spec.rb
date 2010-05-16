@@ -86,6 +86,5 @@ describe Mongoid::Document, ".attr_accessible" do
     end
   end
 
-  # context "classes without attr_accessible"
   # context "inheritence"
 end
