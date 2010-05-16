@@ -17,6 +17,14 @@ class User
   attr :regular_attr_2, :writable => true
 
   attr_accessible :regular_attr_1
+
+  embeds_many :roles
+end
+
+class Role
+  include Mongoid::Document
+  field :name
+  embedded_in :user, :inverse_of => :roles
 end
 
 describe Mongoid, ".attr_accessible" do
@@ -66,7 +74,18 @@ describe Mongoid, ".attr_accessible" do
     end
   end
 
-  # context "associations"
+  context "associations" do
+    it "should not be bulk updatable" do
+      role_json = {
+        '_id' => "4bee89c6aea6ec4457000005",
+        '_type' => "Role",
+        'name' => "Administrator"
+      }
+      user = User.new(:roles => [role_json])
+      user.roles.should == []
+    end
+  end
+
   # context "classes without attr_accessible"
   # context "inheritence"
 end
